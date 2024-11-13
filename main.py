@@ -45,7 +45,7 @@ class HandshakeGrabber:
 
         for attempt in range(3):  # Retry mechanism
             try:
-                subprocess.run(f"iwconfig {self.adaptor_name} channel {channel}",
+                subprocess.run(f"iwconfig {self.interface} channel {channel}",
                                shell=True, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                 return True
             except subprocess.CalledProcessError as e:
