@@ -24,7 +24,8 @@ class HandshakeGrabber:
         self.running = False
         self.worker_threads = []
         self.channel_hopper_thread = None
-
+        self.default_timeout = 5
+        
         if channel_range:
             if channel_range == "2.4GHz":
                 self.channels = list(range(1, 14))
@@ -106,7 +107,7 @@ class HandshakeGrabber:
             # Check if the interface exists
             interface_path = f"/sys/class/net/{interface}/"
             if not os.path.exists(interface_path):
-                print(f"Interface {interface} does not exist.")
+                logging.error(f"Interface {interface} does not exist.")
                 return False
 
             # Check the type of the interface
@@ -257,7 +258,7 @@ class HandshakeGrabber:
 def main():
     # Check if the script is being run as root
     if os.geteuid() != 0:
-        print("Error: This script must be run as root (use sudo).")
+        logging.error("This script must be run as root (use sudo).")
         sys.exit(1)  # Exit the program with an error code
 
     # Set up command-line argument parsing
