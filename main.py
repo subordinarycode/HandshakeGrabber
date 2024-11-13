@@ -50,7 +50,7 @@ class HandshakeGrabber:
                                shell=True, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                 return True
             except subprocess.CalledProcessError as e:
-                logging.error(f"Failed to change to channel {channel}: {e}")
+                logger.error(f"Failed to change to channel {channel}: {e}")
                 time.sleep(0.5)  # Wait before retrying
 
         return False
@@ -67,7 +67,7 @@ class HandshakeGrabber:
                 changed_successful = self.change_channel(channel)
 
                 if not changed_successful:
-                    logging.error(f"Failed to change channel to: {channel}")
+                    logger.error(f"Failed to change channel to: {channel}")
                     continue
                 else:
 
@@ -80,7 +80,7 @@ class HandshakeGrabber:
 
         except KeyboardInterrupt:
             print()
-            logging.info("Channel hopping stopped by user.")
+            logger.info("Channel hopping stopped by user.")
 
     @staticmethod
     def check_monitor_mode(interface) -> bool:
@@ -107,7 +107,7 @@ class HandshakeGrabber:
             # Check if the interface exists
             interface_path = f"/sys/class/net/{interface}/"
             if not os.path.exists(interface_path):
-                logging.error(f"Interface {interface} does not exist.")
+                logger.error(f"Interface {interface} does not exist.")
                 return False
 
             # Check the type of the interface
@@ -200,7 +200,7 @@ class HandshakeGrabber:
             return key_info.guess_key_number()
 
         with self.lock:
-            logging.error("Unable to detect frame number for EAPOL packet.")
+            logger.error("Unable to detect frame number for EAPOL packet.")
 
         return None
 
@@ -226,7 +226,7 @@ class HandshakeGrabber:
                                shell=True, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                 return True
             except subprocess.CalledProcessError as e:
-                logging.error(f"Failed to change to channel {channel}: {e}")
+                logger.error(f"Failed to change to channel {channel}: {e}")
                 time.sleep(0.5)  # Wait before retrying
 
         return False
@@ -258,7 +258,7 @@ class HandshakeGrabber:
 def main():
     # Check if the script is being run as root
     if os.geteuid() != 0:
-        logging.error("This script must be run as root (use sudo).")
+        logger.error("This script must be run as root (use sudo).")
         sys.exit(1)  # Exit the program with an error code
 
     # Set up command-line argument parsing
