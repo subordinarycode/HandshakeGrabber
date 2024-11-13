@@ -206,10 +206,13 @@ class HandshakeGrabber:
 
     def _do_work(self):
         while not self.stop_event.is_set():
-            packet = self.packet_queue.get()
-            self._parse_packet(packet)
-            self.packet_queue.task_done()
-
+            try:
+                packet = self.packet_queue.get()
+                self._parse_packet(packet)
+                self.packet_queue.task_done()
+            except:
+                pass
+                
     def _add_packet_to_queue(self, packet):
         self.packet_queue.put(packet)
 
