@@ -213,24 +213,6 @@ class HandshakeGrabber:
     def _add_packet_to_queue(self, packet):
         self.packet_queue.put(packet)
 
-    def change_channel(self, channel: int) -> bool:
-        """
-        Changes the Wi-Fi adapter's channel to the specified channel.
-        """
-        if not isinstance(channel, int) or channel not in self.channels:
-            return False
-
-        for attempt in range(3):  # Retry mechanism
-            try:
-                subprocess.run(f"iwconfig {self.interface} channel {channel}",
-                               shell=True, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-                return True
-            except subprocess.CalledProcessError as e:
-                logger.error(f"Failed to change to channel {channel}: {e}")
-                time.sleep(0.5)  # Wait before retrying
-
-        return False
-
     def start(self):
         if not self.running:
             self.running = True
